@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Chat</title>
+</head>
+<body>
+    <div class="container">
+        <input type="text" placeholder="Enter name here" id="name_input" />
+        <input type="text" placeholder="Message" id="message_input" />
+        <input type="button" id="send_button" value="Send Message" />
+        <ul id="message_list" class="chat_list"></ul>
+    </div>
+
+
+    <script src="/js/signalr.js"></script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+        document.getElementById("send_button").disabled = true;
+
+        connection.start().then(function () {
+            document.getElementById("send_button").disabled = false;
+        });
+
+        connection.on("ReceiveMessage", function (message) {
+            addMessageOther(message.user, message.userMessage)
+        })
+
+        document.getElementById("send_button").addEventListener("click", function (event) {
+            var userName = document.getElementById("name_input").value;
+            var message = document.getElementById("message_input").value;
+
+            connection.invoke("SendMessage", userName, message);
+            addMessageSelf("You", message)
+        })
+
+        var addMessageSelf = function (user, message) {
+            var div = document.createElement("div");
+            var li = document.createElement("li");
+            div.classList.add("message_self");
+            li.textContent = user + ": " + message;
+            div.appendChild(li)
+            document.getElementById("message_list").appendChild(div)
+        }
+        var addMessageOther = function (user, message) {
+            var div = document.createElement("div");
+            var li = document.createElement("li");
+            div.classList.add("message_other");
+            li.textContent =  message + " :" + user;
+            div.appendChild(li)
+            document.getElementById("message_list").appendChild(div)
+        }
+    </script>
+</body>
+</html>
+<style>
+    .container {
+        align-content: center;
+        justify-content: center;
+        margin: auto;
+        width: 500px;
+        padding: 100px;
+    }
+
+    .message_self {
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 25px;
+        padding: 20px;
+        margin: 5px;
+        width: 200px;
+        float: left;
+    }
+    .message_other {
+        background-color: darkgrey;
+        color: white;
+        border-radius: 25px;
+        
+        padding: 20px;
+        width: 200px;
+    
+        float: right;
+    }
+
+    .chat_list {
+        list-style-type: none;
+    }
+
+</style>
