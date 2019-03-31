@@ -6,10 +6,10 @@
 </head>
 <body>
     <div class="container">
+        <ul id="message_list" class="chat_list"></ul>
         <input type="text" placeholder="Enter name here" id="name_input" />
         <input type="text" placeholder="Message" id="message_input" />
         <input type="button" id="send_button" value="Send Message" />
-        <ul id="message_list" class="chat_list"></ul>
     </div>
 
 
@@ -38,18 +38,22 @@
         var addMessageSelf = function (user, message) {
             var div = document.createElement("div");
             var li = document.createElement("li");
+            var list = document.getElementById("message_list");
             div.classList.add("message_self");
             li.textContent = user + ": " + message;
             div.appendChild(li)
-            document.getElementById("message_list").appendChild(div)
+            list.appendChild(div)
+            list.scrollTop = list.scrollHeight;
         }
         var addMessageOther = function (user, message) {
             var div = document.createElement("div");
             var li = document.createElement("li");
+            var list = document.getElementById("message_list");
             div.classList.add("message_other");
             li.textContent =  message + " :" + user;
             div.appendChild(li)
-            document.getElementById("message_list").appendChild(div)
+            list.appendChild(div)
+            list.scrollTop = list.scrollHeight;
         }
     </script>
 </body>
@@ -64,27 +68,31 @@
     }
 
     .message_self {
+        flex: 0 0 auto;
         background-color: cornflowerblue;
         color: white;
         border-radius: 25px;
         padding: 20px;
         margin: 5px;
         width: 200px;
+        margin-top: 5px;
         float: left;
     }
     .message_other {
         background-color: darkgrey;
         color: white;
         border-radius: 25px;
-        
+        margin-top: 5px;
         padding: 20px;
         width: 200px;
-    
         float: right;
     }
 
     .chat_list {
         list-style-type: none;
+        width 300px;
+        height: 500px;
+        overflow: auto;
     }
 
 </style>
