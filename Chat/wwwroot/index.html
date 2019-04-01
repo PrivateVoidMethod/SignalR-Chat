@@ -24,7 +24,7 @@
         });
 
         connection.on("ReceiveMessage", function (message) {
-            addMessageOther(message.user, message.userMessage)
+            addMessage(message.user, message.userMessage, false)
         })
 
         document.getElementById("send_button").addEventListener("click", function (event) {
@@ -32,28 +32,40 @@
             var message = document.getElementById("message_input").value;
 
             connection.invoke("SendMessage", userName, message);
-            addMessageSelf("You", message)
+            addMessage("You", message, true)
         })
 
-        var addMessageSelf = function (user, message) {
-            var div = document.createElement("div");
-            var li = document.createElement("li");
-            var list = document.getElementById("message_list");
-            div.classList.add("message_self");
-            li.textContent = user + ": " + message;
-            div.appendChild(li)
-            list.appendChild(div)
-            list.scrollTop = list.scrollHeight;
-        }
-        var addMessageOther = function (user, message) {
-            var div = document.createElement("div");
-            var li = document.createElement("li");
-            var list = document.getElementById("message_list");
-            div.classList.add("message_other");
-            li.textContent =  message + " :" + user;
-            div.appendChild(li)
-            list.appendChild(div)
-            list.scrollTop = list.scrollHeight;
+
+        var addMessage = function (user, message, ownMessage) {
+            var container = document.createElement("div");
+            var messageContainer = document.createElement("div");
+            var userMessage = document.createElement("li");
+            var name = document.createElement("div");
+            var messageList = document.getElementById("message_list");
+
+            if (ownMessage)
+            {
+                messageContainer.classList.add("message_self");
+                container.classList.add("message_container_self");
+            }
+            else
+            {
+                messageContainer.classList.add("message_other");
+                container.classList.add("message_container_other");
+            }
+
+            name.classList.add("message_name");
+
+            userMessage.textContent = message;
+            name.textContent = user;
+
+            messageContainer.appendChild(userMessage);
+
+            container.appendChild(name);
+            container.appendChild(messageContainer);
+
+            messageList.appendChild(container);
+            messageList.scrollTop = messageList.scrollHeight;
         }
     </script>
 </body>
@@ -68,29 +80,45 @@
     }
 
     .message_self {
-        flex: 0 0 auto;
+        display: block;
         background-color: cornflowerblue;
         color: white;
-        border-radius: 25px;
-        padding: 20px;
-        margin: 5px;
-        width: 200px;
-        margin-top: 5px;
-        float: left;
+        border-radius: 10px;
+        padding: 10px;
+        width: auto;
+        margin-bottom: 5px;
+        max-width: 200px;
     }
+
     .message_other {
         background-color: darkgrey;
         color: white;
-        border-radius: 25px;
-        margin-top: 5px;
-        padding: 20px;
-        width: 200px;
+        border-radius: 10px;
+        padding: 10px;
+        width: auto;
+        max-width: 200px;
+    }
+
+    .message_name {
+        color: gray;
+        margin-left: 5px;
+    }
+
+    .message_container_other {
+        display: inline-block;
+        clear: both;
         float: right;
+    }
+
+    .message_container_self {
+        display: inline-block;
+        clear: both;
+        float: left;
     }
 
     .chat_list {
         list-style-type: none;
-        width 300px;
+        width: 300px;
         height: 500px;
         overflow: auto;
     }
