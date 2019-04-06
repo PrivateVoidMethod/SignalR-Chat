@@ -9,6 +9,5 @@ namespace Chat.Models
     {
         public string User { get; set; }
         public string UserMessage { get; set; }
-
     }
 }

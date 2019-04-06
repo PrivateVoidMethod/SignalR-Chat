@@ -11,7 +11,6 @@ namespace Chat.Models
         public async Task SendMessage(string user, string message)
         {
             var m = new Message { User = user, UserMessage = message };
-          
             await Clients.Others.SendAsync("ReceiveMessage", m);
 
         }

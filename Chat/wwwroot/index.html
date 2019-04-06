@@ -10,39 +10,66 @@
         <input type="text" placeholder="Enter name here" id="name_input" />
         <input type="text" placeholder="Message" id="message_input" />
         <input type="button" id="send_button" value="Send Message" />
+        
+        <!--<div class="message_container_self">
+            
+            <div class="message_name">asd</div>
+            <div class="message_self">
+                <li>asdas</li>
+            </div>
+        </div>-->
+
     </div>
 
 
     <script src="/js/signalr.js"></script>
-    <script>
+    <script>        
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+        var sendButton = document.getElementById("send_button");
+        var messageInput = document.getElementById("message_input");
+        var nameInput = document.getElementById("name_input");
 
-        document.getElementById("send_button").disabled = true;
-
-        connection.start().then(function () {
-            document.getElementById("send_button").disabled = false;
-        });
+        connection.start();
+        sendButton.disabled = true;
 
         connection.on("ReceiveMessage", function (message) {
             addMessage(message.user, message.userMessage, false)
         })
 
-        document.getElementById("send_button").addEventListener("click", function (event) {
-            var userName = document.getElementById("name_input").value;
-            var message = document.getElementById("message_input").value;
+        sendButton.addEventListener("click", function (event) {
+            var userName = nameInput.value;
+            var message = messageInput.value;
 
             connection.invoke("SendMessage", userName, message);
             addMessage("You", message, true)
+            messageInput.value = "";
+            messageInput.focus();
+            sendButton.disabled = true;
         })
 
+        messageInput.addEventListener("keyup", function (event) {
+
+            if (messageInput.value === "") {
+                sendButton.disabled = true;
+            } else {
+                sendButton.disabled = false
+            }
+
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                sendButton.click();
+            }
+        })
 
         var addMessage = function (user, message, ownMessage) {
             var container = document.createElement("div");
             var messageContainer = document.createElement("div");
             var userMessage = document.createElement("li");
             var name = document.createElement("div");
+            var tooltip = document.createElement("span");
             var messageList = document.getElementById("message_list");
-
+            
+            
             if (ownMessage)
             {
                 messageContainer.classList.add("message_self");
@@ -53,13 +80,17 @@
                 messageContainer.classList.add("message_other");
                 container.classList.add("message_container_other");
             }
-
             name.classList.add("message_name");
+            tooltip.classList.add("tooltip");
 
+            var time = new Date().toLocaleTimeString("da-DK", { hour: '2-digit', minute: '2-digit' });
+            
             userMessage.textContent = message;
             name.textContent = user;
+            tooltip.textContent = time;
 
             messageContainer.appendChild(userMessage);
+            container.appendChild(tooltip);
 
             container.appendChild(name);
             container.appendChild(messageContainer);
@@ -111,9 +142,32 @@
     }
 
     .message_container_self {
+        position: relative;
         display: inline-block;
         clear: both;
         float: left;
+    }
+
+    .message_container_self span {
+       visibility: hidden;
+    }
+
+    .message_container_self:hover span {
+       visibility: visible;
+    }
+
+    .tooltip {
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        overflow: visible;
+        position: absolute;
+        z-index: 1;
+        top: 15px;
+        right: 105%;
     }
 
     .chat_list {
@@ -121,6 +175,7 @@
         width: 300px;
         height: 500px;
         overflow: auto;
+        /*overflow: visible;*/
     }
 
 </style>
