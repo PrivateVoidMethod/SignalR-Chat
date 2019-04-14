@@ -1,0 +1,138 @@
+﻿body {
+}
+
+.container {
+    align-content: center;
+    justify-content: center;
+    margin: auto;
+    width: 800px;
+    padding: 50px;
+}
+
+.name_input {
+    width: 150px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 2px 2px 3px #666;
+    font-size: 20px;
+    padding: 4px 7px;
+    outline: none;
+}
+
+    .name_input:focus {
+        border-color: cornflowerblue;
+    }
+
+.message_input {
+    width: 450px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 2px 2px 3px #666;
+    font-size: 20px;
+    padding: 4px 7px;
+    outline: none;
+}
+
+    .message_input:focus {
+        border-color: cornflowerblue;
+    }
+
+.message_self {
+    display: block;
+    background-color: cornflowerblue;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: auto;
+    margin-bottom: 5px;
+    max-width: 200px;
+}
+
+#send_button {
+    background-color: cornflowerblue;
+    border: none;
+    color: white;
+    padding: 12px 22px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    outline: none;
+}
+
+    #send_button:disabled {
+        background-color: lightblue;
+    }
+
+.message_other {
+    display: block;
+    background-color: darkgrey;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: auto;
+    margin-bottom: 5px;
+    max-width: 200px;
+}
+
+.message_name {
+    color: gray;
+    margin-left: 5px;
+}
+
+.message_container_other {
+    position: relative;
+    display: inline-block;
+    clear: both;
+    float: right;
+}
+
+.message_container_self {
+    position: relative;
+    display: inline-block;
+    clear: both;
+    float: left;
+}
+
+    .message_container_self span {
+        visibility: hidden;
+    }
+
+    .message_container_self:hover span {
+        visibility: visible;
+    }
+
+.message_container_other span {
+    visibility: hidden;
+}
+
+.message_container_other:hover span {
+    visibility: visible;
+}
+
+.tooltip {
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    top: 15px;
+    right: 105%;
+    z-index: 10000;
+}
+
+.chat_list {
+    padding-left: 150px;
+    padding-right: 150px;
+    width: auto;
+    height: 500px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    overflow-y: scroll;
+}
